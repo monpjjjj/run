@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Habitss · Rumbo al medio maratón</title>
+<style>
+:root{--bg:#fbf6f1;--card:#fff;--tx:#2b2430;--mut:#7d7085;--ac:#d6578a;--soft:#f7dde8;--ok:#3f9a70;--bd:#eadfe6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1620;--card:#252030;--tx:#f1eaf4;--mut:#a99bb2;--ac:#ee7ba2;--soft:#3a2a38;--ok:#6cc79a;--bd:#352d3d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1620;--card:#252030;--tx:#f1eaf4;--mut:#a99bb2;--ac:#ee7ba2;--soft:#3a2a38;--ok:#6cc79a;--bd:#352d3d;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.25rem;margin:4px 0 2px}.sub{color:var(--mut);font-size:.85rem;margin:0 0 14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;font-weight:600;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:14px}
+.lbl{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+.big{font-size:1.35rem;font-weight:700;margin:2px 0 6px}
+.pill{display:inline-block;background:var(--soft);color:var(--ac);border-radius:99px;padding:2px 10px;font-size:.78rem;font-weight:600;margin-right:6px}
+.bar{height:12px;background:var(--soft);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--ac);border-radius:99px}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:.9rem}
+.btn{margin-top:12px;width:100%;padding:12px;border:0;border-radius:12px;background:var(--ok);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.btn.off{background:var(--soft);color:var(--mut)}
+.track{position:relative;height:40px;margin:10px 0 2px}
+.track::before{content:"";position:absolute;left:0;right:0;top:26px;height:4px;background:var(--soft);border-radius:4px}
+.track b{position:absolute;top:0;font-size:1.5rem;transform:translateX(-50%)}
+.track s{position:absolute;top:18px;font-size:.9rem;text-decoration:none;transform:translateX(-50%)}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.82rem}
+th,td{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:.72rem;text-transform:uppercase;white-space:nowrap}
+tr.cur td{background:var(--soft)}tr.past td{color:var(--mut)}
+.d{color:var(--mut);font-size:.72rem;display:block}
+.hide{display:none}
+</style></head><body><main>
+<h1>🏃‍♀️ Habitss · Rumbo al medio maratón</h1>
+<p class="sub">52 semanas · 3 sesiones por semana · 21 km · arranca el 16 de noviembre de 2026</p>
+<div class="tabs"><button id="t1" class="on">Hoy</button><button id="t2">Panorama general</button></div>
+<section id="v1"></section><section id="v2" class="hide"></section>
+</main>
+<script>
+const R=`M1;6/1;;7/1
+M1;7/1;;8/1
+M1;6/2;;7/2
+M1;~5/2
+M1;6/3;;7/3
+M1;5/4;;6/4
+M1;5/5;;6/5
+M1;~4/5
+M1;3/8;;4/8
+M1;3/10;;3/12
+M1;2/15;;2/18
+M1;~2/12
+M1;20 min corridos;;25 min corridos
+M1;22 min corridos;;28 min corridos
+M1;25 min corridos;;30 min corridos
+M1;25 min corridos;20 min suaves;🏁 META 1: 5 km corridos
+M2;3 km suaves;;5 km largo
+M2;3 km suaves;4 km suaves;5,5 km largo
+M2;3,5 km suaves;4 km suaves;6 km largo
+M2;~3 km suaves;;~5 km largo
+M2;4 km suaves;;6,5 km largo
+M2;3 km suaves;;🏁 META 2: 7 km
+M3;4 km suaves;;7 km largo
+M3;4 km suaves;5 km suaves;7,5 km largo
+M3;5 km suaves;;8 km largo
+M3;~4 km suaves;;~6 km largo
+M3;5 km suaves;;8,5 km largo
+M3;5 km suaves;6 km suaves;9 km largo
+M3;~4 km suaves;;~7 km largo
+M3;5 km suaves;6 km suaves;9,5 km largo
+M3;4 km suaves;;🏁 META 3: 10 km
+M4;5 km suaves;6 km suaves;10 km largo
+M4;5 km suaves;6 km suaves;11 km largo
+M4;6 km suaves;;12 km largo
+M4;~5 km suaves;;~8 km largo
+M4;6 km suaves;7 km suaves;12 km largo
+M4;6 km suaves;7 km suaves;13 km largo
+M4;~5 km suaves;;~9 km largo
+M4;6 km suaves;8 km suaves;13,5 km largo
+M4;6 km suaves;8 km suaves;14 km largo
+M4;5 km suaves;;🏁 META 4: 15 km
+M5;6 km suaves;8 km suaves;15 km largo
+M5;6 km suaves;8 km suaves;16 km largo
+M5;~5 km suaves;~6 km suaves;~12 km largo
+M5;6 km suaves;8 km suaves;17 km largo
+M5;6 km suaves;7 km suaves;17 km largo
+M5;5 km suaves;;🏁 META 5: 18 km
+M6;~5 km suaves;~6 km suaves;~12 km largo
+M6;6 km suaves;8 km suaves;19 km largo
+M6;6 km suaves;8 km suaves;20 km largo
+M6;5 km suaves;4 km suaves;8 km largo
+M6;4 km suaves;3 km suaves;🏁 META 6: 21 km`.split("\n").map(l=>l.split(";"));
+const tx=s=>{s=s||"";let l="";if(s[0]=="~"){l="🌿 ";s=s.slice(1)}const m=s.match(/^(\d+)\/(\d+)$/);return l+(m?`${m[1]} × (${m[2]} min corre + 2 min camina)`:s)};
+const W=R.map(r=>{const a=r[1],b=r[2]||a,c=r[3]||b;return{m:r[0],s:[tx(a),tx(b),tx(c)]}});
+const OFF=[0,2,5],DN=["Lun","Mié","Sáb"];
+const META=[["M1","5 km",1,16],["M2","7 km",17,22],["M3","10 km",23,31],["M4","15 km",32,41],["M5","18 km",42,47],["M6","21 km",48,52]];
+const KM=[0,5,7,10,15,18,21];
+const dt=n=>new Date(2026,10,16+n);
+const sh=d=>String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
+const lg=d=>d.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
+const lgy=d=>d.toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});
+const S=[];W.forEach((w,i)=>w.s.forEach((t,j)=>S.push({w:i+1,j,off:i*7+OFF[j],t,m:w.m})));
+const n=new Date(),T=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+const d=Math.round((T-new Date(2026,10,16))/864e5);
+const key="habitss-hoy-"+d;
+let flag=false;try{flag=localStorage.getItem(key)=="1"}catch(e){}
+const isDone=s=>s.off<d||(s.off==d&&flag);
+const $=id=>document.getElementById(id);
+const bar=p=>`<div class="bar"><i style="width:${Math.round(p*100)}%"></i></div>`;
+function hoy(){
+  const total=S.length,done=S.filter(isDone).length,p=done/total;
+  const sess=S.find(s=>s.off==d),next=S.find(s=>s.off>d);
+  const wk=Math.min(52,Math.max(1,Math.floor(d/7)+1));
+  const wS=S.filter(s=>s.w==wk),wD=wS.filter(isDone).length;
+  const mi=META.findIndex(m=>wk>=m[2]&&wk<=m[3]),mm=META[mi];
+  const mS=S.filter(s=>s.w>=mm[2]&&s.w<=mm[3]),mD=mS.filter(isDone).length;
+  let h="";
+  if(d<0){h+=`<div class="card"><p class="lbl">Empieza pronto</p><p class="big">${lg(dt(0))}</p><p>Tu primera sesión: ${S[0].t}</p></div>`}
+  else if(d>S[S.length-1].off){h+=`<div class="card"><p class="big">🏁 ¡Completaste el plan!</p></div>`}
+  else if(sess){
+    h+=`<div class="card"><p class="lbl">Hoy te toca · ${lg(T)}</p><p class="big">${sess.t}</p>
+    <span class="pill">Semana ${sess.w} de 52</span><span class="pill">Meta ${sess.m.slice(1)} · ${KM[+sess.m.slice(1)]} km</span>
+    <p class="sub" style="margin:10px 0 0">Siempre: 5 min caminando antes y después. Ritmo cómodo, que puedas platicar. Si algo duele, descansa y consulta a tu médico.</p>
+    <button class="btn ${flag?"off":""}" id="ok">${flag?"✓ Sesión hecha (toca para deshacer)":"Marcar sesión de hoy como hecha"}</button></div>`}
+  else{h+=`<div class="card"><p class="lbl">Hoy · ${lg(T)}</p><p class="big">Día de descanso 🌿</p><p style="margin:0">Próxima sesión: <b>${lg(dt(next.off))}</b><br>${next.t}</p></div>`}
+  h+=`<div class="card"><p class="lbl">Tu progreso</p><div class="row"><b>${done} de ${total} sesiones</b><b>${(p*100).toFixed(1)}%</b></div>${bar(p)}
+  <p class="sub" style="margin:2px 0 8px">Calculado como si cumplieras todas tus sesiones en su día.</p>
+  <div class="row"><span>Esta semana (${wk})</span><span>${wD} / 3</span></div>${bar(wD/3)}
+  <div class="row"><span>Meta ${mi+1} · ${mm[1]}</span><span>${mD} / ${mS.length}</span></div>${bar(mD/mS.length)}</div>`;
+  const km=KM.findIndex((k,i)=>i>0&&p*total<=S.filter(s=>+s.m.slice(1)<=i).length);
+  const pos=Math.min(96,Math.max(3,p*100));
+  h+=`<div class="card"><p class="lbl">La pista</p><div class="track"><b style="left:${pos}%">🏃‍♀️</b>`+KM.slice(1).map(k=>`<s style="left:${k/21*95+2}%">${k==21?"🏁":"🚩"}</s>`).join("")+`</div><div class="row"><span>Inicio</span><span>21 km</span></div></div>`;
+  $("v1").innerHTML=h;
+  const b=$("ok");if(b)b.onclick=()=>{flag=!flag;try{localStorage.setItem(key,flag?"1":"0")}catch(e){}hoy()};
+}
+function pano(){
+  const wk=Math.floor(d/7)+1;
+  let h=`<div class="card"><p class="lbl">Las 6 metas</p><div class="wrap"><table><tr><th>Meta</th><th>Semanas</th><th>Avance</th><th>Estado</th><th>Fecha objetivo</th></tr>`;
+  META.forEach((m,i)=>{const ms=S.filter(s=>s.w>=m[2]&&s.w<=m[3]),dn=ms.filter(isDone).length,last=ms[ms.length-1];
+    const st=dn==ms.length?"✅ Lograda":dn>0||(wk>=m[2]&&wk<=m[3]&&d>=0)?"🏃‍♀️ En curso":"Pendiente";
+    h+=`<tr><td><b>${m[1]}</b></td><td>${m[2]}–${m[3]}</td><td>${dn} / ${ms.length}${bar(dn/ms.length)}</td><td>${st}</td><td>${sh(dt(last.off))}/${dt(last.off).getFullYear()}</td></tr>`});
+  h+=`</table></div></div><div class="card"><p class="lbl">Plan semanal · 52 semanas</p>
+  <p class="sub">Lunes, miércoles y sábado (sesión larga). 🌿 = semana de descarga. 🏁 = meta cumplida al terminar la sesión.</p><div class="wrap"><table><tr><th>Sem</th><th>Semana del</th><th>Meta</th><th>Lun</th><th>Mié</th><th>Sáb · larga</th></tr>`;
+  W.forEach((w,i)=>{const c=(i+1)==wk?"cur":(i+1)<wk?"past":"";
+    h+=`<tr class="${c}"><td>${i+1}</td><td>${sh(dt(i*7))}</td><td>${w.m}</td>`+w.s.map((t,j)=>`<td>${S[i*3+j].off<d||(S[i*3+j].off==d&&flag)?"✓ ":""}${t}<span class="d">${sh(dt(i*7+OFF[j]))}</span></td>`).join("")+`</tr>`});
+  h+=`</table></div></div><p class="sub" style="text-align:center">Poco a poco, kilómetro a kilómetro ✨<br>Fin del plan: ${lgy(dt(S[S.length-1].off))}</p>`;
+  $("v2").innerHTML=h;
+}
+function tab(a){$("v1").className=a==1?"":"hide";$("v2").className=a==2?"":"hide";$("t1").className=a==1?"on":"";$("t2").className=a==2?"on":""}
+$("t1").onclick=()=>{hoy();tab(1)};$("t2").onclick=()=>{pano();tab(2)};
+hoy();pano();
+</script></body></html>
